@@ -36,6 +36,7 @@ int main(int argc, char ** argv){
 
     text_array = (char *) map_region;
     printf("%s", text_array);
+    printf("%s", &text_array[21]);
 
     munmap(map_region,size);
     close(fd);
