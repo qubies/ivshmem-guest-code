@@ -56,8 +56,11 @@ int main(int argc, char ** argv){
  
     strncpy(text_array, "Hello from IVSHMEM!\n", 20);
     strncpy(&text_array[21], buffer, 26);
+    text_array[47] = '\n';
+    text_array[48] = '\0';
 
     printf("%s", text_array);
+    printf("%s", &text_array[21]);
 
     printf("munmap is unmapping %x\n", memptr);
     munmap(memptr, length);
