@@ -8,6 +8,7 @@
 #include <openssl/sha.h>
 #include <unistd.h>
 #include <errno.h>
+#include <time.h>
 
 int main(int argc, char ** argv){
 
@@ -43,8 +44,18 @@ int main(int argc, char ** argv){
     for (i=0; i < length/sizeof(char); i++){ //this assumes that only longs are stored in the array
         text_array[i]='\0'; // null terminators in the end 
     }
+
+    time_t timer;
+    char buffer[26];
+    struct tm* tm_info;
+
+    time(&timer);
+    tm_info = localtime(&timer);
+
+    strftime(buffer, 26, "%Y-%m-%d %H:%M:%S", tm_info);
+ 
     strncpy(text_array, "Hello from IVSHMEM!\n", 20);
-		
+    strncpy(&text_array[21], buffer, 26);
 
     printf("%s", text_array);
 
