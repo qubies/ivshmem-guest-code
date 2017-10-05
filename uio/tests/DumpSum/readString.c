@@ -35,10 +35,8 @@ int main(int argc, char ** argv){
     }
 
     text_array = (char *) map_region;
-    printf("%s\n", text_array);
+    printf("%s", text_array);
 
     munmap(map_region,size);
     close(fd);
-
-    printf("[SUM] Exiting...\n");
 }
