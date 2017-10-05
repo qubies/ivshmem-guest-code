@@ -11,5 +11,9 @@ dump:	dump.c
 
 hello: helloWorld.c
 	$(CC) $^ -o $@ $(CFLAGS)
+
+read: readString.c
+	$(CC) $^ -o $@ $(CFLAGS)
+
 clean:
 	rm -f sum dump hello
