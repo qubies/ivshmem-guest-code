@@ -9,5 +9,7 @@ sum:	sum.c
 dump:	dump.c
 	$(CC) $^ -o $@ $(CFLAGS)
 
+hello: helloWorld.c
+	$(CC) $^ -o $@ $(CFLAGS)
 clean:
-	rm -f sum dump
+	rm -f sum dump hello
