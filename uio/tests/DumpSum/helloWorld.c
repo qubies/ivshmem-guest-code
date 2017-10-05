@@ -53,9 +53,9 @@ int main(int argc, char ** argv){
     strftime(buffer, 26, "%Y-%m-%d %H:%M:%S", tm_info);
  
     strncpy(text_array, "Hello from IVSHMEM!\n", 20);
-    strncpy(&text_array[21], buffer, 26);
-    text_array[45] = '\n';
-    text_array[46] = '\0';
+    strncpy(&text_array[21], buffer, 20);
+    text_array[40] = '\n';
+    text_array[41] = '\0';
 
     printf("%s", text_array);
     printf("%s", &text_array[21]);
