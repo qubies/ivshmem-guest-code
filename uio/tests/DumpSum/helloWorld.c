@@ -26,8 +26,6 @@ int main(int argc, char ** argv){
     
     length=atoi(argv[2])*1024*1024; //transform to MB
 
-    printf("Mapped size is %d\n", length); //debug printing again.
-
     fd=open(argv[1], O_RDWR);// open the file read write mode. 
 
     /* With UIO the offset selects the memory region --> N * getpagesize() for the Nth memory region */
@@ -62,7 +60,6 @@ int main(int argc, char ** argv){
     printf("%s", text_array);
     printf("%s", &text_array[21]);
 
-    printf("munmap is unmapping %x\n", memptr);
     munmap(memptr, length);
 
     close(fd);
