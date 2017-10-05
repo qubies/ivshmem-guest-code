@@ -54,8 +54,8 @@ int main(int argc, char ** argv){
  
     strncpy(text_array, "Hello from IVSHMEM!\n", 20);
     strncpy(&text_array[21], buffer, 26);
-    text_array[46] = '\n';
-    text_array[47] = '\0';
+    text_array[45] = '\n';
+    text_array[46] = '\0';
 
     printf("%s", text_array);
     printf("%s", &text_array[21]);
