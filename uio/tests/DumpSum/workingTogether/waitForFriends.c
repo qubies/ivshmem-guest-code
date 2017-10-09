@@ -17,12 +17,12 @@
 
 //adds 10 million onto the integer in increments of 1.
 void add10M(int *L, int *I, pthread_mutex_t *mutex) {
-	for (int x = 0; x < 10000000; x++) {
+	for (int x = 0; x < 1000000000; x++) {
 		while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
 		pthread_mutex_lock(mutex);
 		(*I)++;
-		if ((*I) % 1000000 == 0) {
+		if ((*I) % 100000000 == 0) {
 			printf("My Number is:%d\n", *I);
 		}
 		pthread_mutex_unlock(mutex);
@@ -52,6 +52,7 @@ void wait(Nahanni *NN) {
 	int *I = (int *) &NN->Memory[100]; //lol....
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
 	(*L) = 0; //initialise the waiter to stall
+	(*I) = 0; //initialize the counter too ... because its prettier. Its not really needed
 	printf("The before Value:%d\n", *I);
 	add10M(L,I,mutex);
 	printf("The after Value:%d\n", *I);
