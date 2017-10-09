@@ -23,6 +23,9 @@ void add10M(int *L, int *I, pthread_mutex_t *mutex) {
 		} 
 		pthread_mutex_lock(mutex);
 		(*I)++;
+		if ((*I) % 1000000 == 0) {
+			printf("My Number is:%d\n", *I);
+		}
 		pthread_mutex_unlock(mutex);
 	}
 }
