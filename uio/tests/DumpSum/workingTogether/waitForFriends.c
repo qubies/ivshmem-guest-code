@@ -30,14 +30,14 @@ void add10M(int *L, int *I, pthread_mutex_t *mutex) {
 }
 
 void initialize(Nahanni *NN) {
-	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[200]; //initialize the mutex at 1000
+	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[2]; //initialize the mutex at 1000
 	
 	if (pthread_mutex_init(mutex, NULL) != 0) {
 		errPrint("Problem Initializing Mutex. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
 	
-	int *I = (int *) &NN->Memory[100]; //lol....
+	int *I = (int *) &NN->Memory[1]; //lol....
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
 	*I = 0; // start I out as 0
 	*L = 1; //start the others coutning
@@ -48,8 +48,8 @@ void initialize(Nahanni *NN) {
 }
 
 void wait(Nahanni *NN) {
-	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[200]; //initialize the mutex at 1000
-	int *I = (int *) &NN->Memory[100]; //lol....
+	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[2]; //initialize the mutex at 1000
+	int *I = (int *) &NN->Memory[1]; //lol....
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
 	(*L) = 0; //initialise the waiter to stall
 	(*I) = 0; //initialize the counter too ... because its prettier. Its not really needed
