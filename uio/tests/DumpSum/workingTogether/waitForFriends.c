@@ -14,50 +14,54 @@
 #include "Nahanni.h"
 #include "generalFunctions.h"
 
-
+typedef struct {
+	int val;
+	pthread_mutex_t lock;
+} lockableInt;
 //adds 10 million onto the integer in increments of 1.
-void add10M(int *L, int *I, pthread_mutex_t *mutex) {
+void add10M(lockableInt *L, lockableInt *I) {
 	for (int x = 0; x < 100000000; x++) {
-		while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
+		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
-		pthread_mutex_lock(mutex);
-		(*I)++;
-		if ((*I) % 10000000 == 0) {
-			printf("My Number is:%d\n", *I);
+		pthread_mutex_lock(&(I->lock));
+		(I->val)++;
+		if ((I->val) % 10000000 == 0) {
+			printf("My Number is:%d\n", I->val);
 		}
-		pthread_mutex_unlock(mutex);
+		pthread_mutex_unlock(&(I->lock));
 	}
 }
 
 void initialize(Nahanni *NN) {
-	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[8]; //initialize the mutex at 1000
 	
-	if (pthread_mutex_init(mutex, NULL) != 0) {
+	lockableInt *lockables = (lockableInt *)(NN->Memory);
+	lockableInt *I = &lockables[0]; 
+	lockableInt *L = &lockables[1]; 
+	if (pthread_mutex_init(&(I->lock), NULL) != 0) {
 		errPrint("Problem Initializing Mutex. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
-	
-	int *I = (int *) &NN->Memory[4]; //lol....
-	int *L = (int *) &NN->Memory[0]; //init is at the start...
-	*I = 0; // start I out as 0
-	*L = 1; //start the others coutning
-	printf("The before Value:%d\n", *I);
-	add10M(L,I,mutex);
-	printf("The after Value:%d\n", *I);
+	L->val = 0; //initialise the waiter to stall
+	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
+	printf("The before Value:%d\n", I->val);
+	add10M(L,I);
+	printf("The after Value:%d\n", I->val);
 	freeNahanni(NN);
+
 }
 
 void wait(Nahanni *NN) {
-	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[8]; //initialize the mutex at 1000
-	int *I = (int *) &NN->Memory[4]; //lol....
-	int *L = (int *) &NN->Memory[0]; //init is at the start...
-	(*L) = 0; //initialise the waiter to stall
-	(*I) = 0; //initialize the counter too ... because its prettier. Its not really needed
-	printf("The before Value:%d\n", *I);
-	add10M(L,I,mutex);
-	printf("The after Value:%d\n", *I);
+	lockableInt *lockables = (lockableInt *)(NN->Memory);
+	lockableInt *I = &lockables[0]; 
+	lockableInt *L = &lockables[1]; 
+	L->val = 0; //initialise the waiter to stall
+	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
+	printf("The before Value:%d\n", I->val);
+	add10M(L,I);
+	printf("The after Value:%d\n", I->val);
 	freeNahanni(NN);
 }
+
 int main (int argc, char*argv[]) {
 	if (argc != 4) {
 		errPrint("Usage file, size, bool start\n");
