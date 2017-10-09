@@ -9,7 +9,7 @@
 CC = gcc
 CFLAGS= -c -std=c99 -D_POSIX_C_SOURCE=200809L -D_BSD_SOURCE 
 LDFLAGS= -g
-
+LDLIBS=-pthread
 .PHONY: all clean test
 
 wait: waitForFriends.o Nahanni.o generalFunctions.o 
@@ -29,4 +29,4 @@ clean:
 
 test: tests.c generalFunctions.c
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-	valgrind --vgdb=yes ./test
+	
