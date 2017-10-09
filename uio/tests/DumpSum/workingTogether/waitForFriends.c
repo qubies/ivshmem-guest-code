@@ -23,6 +23,7 @@ void add10M(lockableInt *L, lockableInt *I) {
 	for (int x = 0; x < 100000000; x++) {
 		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
+		printf("after\n");
 		pthread_mutex_lock(&(I->lock));
 		(I->val)++;
 		if ((I->val) % 10000000 == 0) {
