@@ -16,19 +16,19 @@
 
 typedef struct {
 	int val;
-	sem_t *lock;
+	sem_t lock;
 } lockableInt;
 //adds 10 million onto the integer in increments of 1.
 void add10M(lockableInt *L, lockableInt *I) {
 	for (int x = 0; x < 100000000; x++) {
 		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
-		sem_wait(I->lock);
+		sem_wait(&(I->lock));
 		(I->val)++;
 		if ((I->val) % 10000000 == 0) {
 			printf("My Number is:%d\n", I->val);
 		}
-		sem_post(I->lock);
+		sem_post(&(I->lock));
 	}
 }
 
@@ -37,7 +37,7 @@ void initialize(Nahanni *NN) {
 	lockableInt *lockables = (lockableInt *)(NN->Memory);
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
-	if (sem_init(I->lock, 1,0) != 0) {
+	if (sem_init(&(I->lock), 1,0) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
