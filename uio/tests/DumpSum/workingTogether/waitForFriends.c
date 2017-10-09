@@ -22,7 +22,7 @@ void add10M(int *L, int *I, pthread_mutex_t *mutex) {
 			sleep(1);
 		} 
 		pthread_mutex_lock(mutex);
-		*I++;
+		(*I)++;
 		pthread_mutex_unlock(mutex);
 	}
 }
