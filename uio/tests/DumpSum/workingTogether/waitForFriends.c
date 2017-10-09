@@ -39,8 +39,9 @@ void initialize(Nahanni *NN) {
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
 	*I = 0; // start I out as 0
 	*L = 1; //start the others coutning
+	printf("The before Value:%d\n", *I);
 	add10M(L,I,mutex);
-	printf("The Current Value:%d\n", *I);
+	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
 
@@ -49,8 +50,9 @@ void wait(Nahanni *NN) {
 	int *I = (int *) &NN->Memory[10000]; //lol....
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
 	(*L) = 0; //initialise the waiter to stall
+	printf("The before Value:%d\n", *I);
 	add10M(L,I,mutex);
-	printf("The Current Value:%d\n", *I);
+	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
 int main (int argc, char*argv[]) {
