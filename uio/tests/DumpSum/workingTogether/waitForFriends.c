@@ -17,12 +17,12 @@
 
 //adds 10 million onto the integer in increments of 1.
 void add10M(int *L, int *I, pthread_mutex_t *mutex) {
-	for (int x = 0; x < 1000000000; x++) {
+	for (int x = 0; x < 100000000; x++) {
 		while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
 		pthread_mutex_lock(mutex);
 		(*I)++;
-		if ((*I) % 100000000 == 0) {
+		if ((*I) % 10000000 == 0) {
 			printf("My Number is:%d\n", *I);
 		}
 		pthread_mutex_unlock(mutex);
