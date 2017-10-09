@@ -42,8 +42,8 @@ void initialize(Nahanni *NN) {
 		errPrint("Problem Initializing Mutex. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
-	L->val = 0; //initialise the waiter to stall
 	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
+	L->val = 1; //initialise the waiter to stall
 	printf("The before Value:%d\n", I->val);
 	add10M(L,I);
 	printf("The after Value:%d\n", I->val);
