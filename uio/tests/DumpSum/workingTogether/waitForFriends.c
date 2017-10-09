@@ -48,6 +48,7 @@ void wait(Nahanni *NN) {
 	pthread_mutex_t *mutex = (pthread_mutex_t *)&NN->Memory[1000]; //initialize the mutex at 1000
 	int *I = (int *) &NN->Memory[10000]; //lol....
 	int *L = (int *) &NN->Memory[0]; //init is at the start...
+	(*L) = 0; //initialise the waiter to stall
 	add10M(L,I,mutex);
 	printf("The Current Value:%d\n", *I);
 	freeNahanni(NN);
