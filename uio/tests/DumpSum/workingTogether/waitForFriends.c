@@ -37,7 +37,7 @@ void initialize(Nahanni *NN) {
 	lockableInt *lockables = (lockableInt *)(NN->Memory);
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
-	if (sem_init(&(I->lock), 1,0) != 0) {
+	if (sem_init(&(I->lock), 1,1) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
