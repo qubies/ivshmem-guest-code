@@ -19,7 +19,6 @@
 void add10M(int *L, int *I, pthread_mutex_t *mutex) {
 	for (int x = 0; x < 10000000; x++) {
 		while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
-			sleep(1);
 		} 
 		pthread_mutex_lock(mutex);
 		(*I)++;
