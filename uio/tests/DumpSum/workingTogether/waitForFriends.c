@@ -45,6 +45,10 @@ void initialize(Nahanni *NN, int *L, int *I) {
 }
 
 void wait(Nahanni *NN, int *L, int *I) {
+	if (sem_init(lock, 1, 1) != 0) {
+		errPrint("Problem Initializing Semaphore. Aborting.\n");
+		exit(EXIT_FAILURE);
+	}
 	*L = 0; //initialise the waiter to stall
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 }
