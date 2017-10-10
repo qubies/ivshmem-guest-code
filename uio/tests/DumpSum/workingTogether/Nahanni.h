@@ -6,6 +6,9 @@ typedef struct {
 	int fd;
 	int size;
 	void *Memory;
+	void *page1;
+	void *page2;
+	void *page3;
 } Nahanni;
 
 

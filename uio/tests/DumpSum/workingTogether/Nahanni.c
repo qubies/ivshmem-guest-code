@@ -30,6 +30,23 @@ Nahanni *NewNahanni(char *filePath, int length) {
 		close(NN->fd);
 		exit(EXIT_FAILURE);
 	}
+	if ((NN->page1 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+		errPrint("mmap failed\n"); //checks if the mmap failed
+		close(NN->fd);
+		exit(EXIT_FAILURE);
+	}
+	if ((NN->page2 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+		errPrint("mmap failed\n"); //checks if the mmap failed
+		close(NN->fd);
+		exit(EXIT_FAILURE);
+	}
+	if ((NN->page3 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+		errPrint("mmap failed\n"); //checks if the mmap failed
+		close(NN->fd);
+		exit(EXIT_FAILURE);
+	}
+
+
 	return NN;
 }
 

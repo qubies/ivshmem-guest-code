@@ -45,10 +45,6 @@ void initialize(Nahanni *NN, int *L, int *I) {
 }
 
 void wait(Nahanni *NN, int *L, int *I) {
-	if (sem_init(lock, 1, 1) != 0) {
-		errPrint("Problem Initializing Semaphore. Aborting.\n");
-		exit(EXIT_FAILURE);
-	}
 	*L = 0; //initialise the waiter to stall
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 }
@@ -59,9 +55,9 @@ int main (int argc, char*argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
-	int *I = (int *) &NN->Memory[0]; 
-	int *L = (int *) &NN->Memory[64]; 
-	lock = (sem_t *) &NN->Memory[128];
+	int *I = (int *) &NN->page1; 
+	int *L = (int *) &NN->page2; 
+	lock = (sem_t *) &NN->page3;
 	if (atoi(argv[3]) == 1) {
 		initialize(NN, L, I);
 	} else {
