@@ -35,31 +35,18 @@ void add10M(int *L, int *I) {
 
 void initialize(Nahanni *NN, int *L, int *I) {
 	
-	char semaphoreName[1 + 6 + 1];
-	semaphoreName[0] = '/';
-	semaphoreName[1 + snprintf(&semaphoreName[1], 6 + 1, "%d", getpid())] = '\0';
-
-	lock = sem_open(semaphoreName, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
-
-	
+	if (sem_init(lock, 1, 1) != 0) {
+		errPrint("Problem Initializing Semaphore. Aborting.\n");
+		exit(EXIT_FAILURE);
+	}
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 	*L = 1; //initialise the waiter to stall
-	add10M(L,I);
-	printf("The after Value:%d\n", *I);
 
 }
 
 void wait(Nahanni *NN, int *L, int *I) {
 	*L = 0; //initialise the waiter to stall
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
-	
-	char semaphoreName[1 + 6 + 1];
-	semaphoreName[0] = '/';
-	semaphoreName[1 + snprintf(&semaphoreName[1], 6 + 1, "%d", getpid())] = '\0';
-
-	lock = sem_open(semaphoreName, O_RDWR);
-	add10M(L,I);
-	printf("The after Value:%d\n", *I);
 }
 
 int main (int argc, char*argv[]) {
@@ -78,6 +65,9 @@ int main (int argc, char*argv[]) {
 	} else {
 		wait(NN, L, I);
 	}
+	printf("The before Value:%d\n", *I);
+	add10M(L,I);
+	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
 
