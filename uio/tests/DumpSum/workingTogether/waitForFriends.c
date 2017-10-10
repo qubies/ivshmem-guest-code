@@ -23,12 +23,16 @@ void add10M(lockableInt *L, lockableInt *I) {
 	for (int x = 0; x < 100000000; x++) {
 		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
-		sem_wait(&(I->lock));
+		if (sem_wait(&(I->lock)) != 0)  {
+			perror("Sem Wait Failed.\n");
+		}
 		(I->val)++;
 		if ((I->val) % 10000000 == 0) {
 			printf("My Number is:%d\n", I->val);
 		}
-		sem_post(&(I->lock));
+		if (sem_post(&(I->lock)) != 0) {
+			perror("Sem Post Failed.\n");
+		}
 	}
 }
 
@@ -37,7 +41,7 @@ void initialize(Nahanni *NN) {
 	lockableInt *lockables = (lockableInt *)(NN->Memory);
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
-	if (sem_init(&(I->lock), 1, 2) != 0) {
+	if (sem_init(&(I->lock), 1, 1) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
