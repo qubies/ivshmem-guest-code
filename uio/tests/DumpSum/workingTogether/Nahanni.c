@@ -25,22 +25,22 @@ Nahanni *NewNahanni(char *filePath, int length) {
 	}
 	//creating the memory map
 	// With UIO the offset selects the memory region --> N * getpagesize() for the Nth memory region 
-	if ((NN->Memory = mmap(NULL, NN->size, PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+/*	if ((NN->Memory = mmap(NULL, NN->size, PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+		errPrint("mmap failed\n"); //checks if the mmap failed
+		close(NN->fd);
+		exit(EXIT_FAILURE);
+	}*/
+	if ((NN->page1 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, 1 * getpagesize())) == MAP_FAILED) {
 		errPrint("mmap failed\n"); //checks if the mmap failed
 		close(NN->fd);
 		exit(EXIT_FAILURE);
 	}
-	if ((NN->page1 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+	if ((NN->page2 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, 2 * getpagesize())) == MAP_FAILED) {
 		errPrint("mmap failed\n"); //checks if the mmap failed
 		close(NN->fd);
 		exit(EXIT_FAILURE);
 	}
-	if ((NN->page2 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
-		errPrint("mmap failed\n"); //checks if the mmap failed
-		close(NN->fd);
-		exit(EXIT_FAILURE);
-	}
-	if ((NN->page3 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, getpagesize())) == MAP_FAILED) {
+	if ((NN->page3 = mmap(NULL, getpagesize(), PROT_READ|PROT_WRITE, MAP_SHARED, NN->fd, 3 * getpagesize())) == MAP_FAILED) {
 		errPrint("mmap failed\n"); //checks if the mmap failed
 		close(NN->fd);
 		exit(EXIT_FAILURE);

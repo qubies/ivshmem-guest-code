@@ -16,7 +16,7 @@
 
 sem_t *lock;
 //adds 10 million onto the integer in increments of 1.
-void add10M(int *L, int *I, sem_t *lock) {
+void add10M(int *L, int *I) {
 	while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
 	} 
 	for (int x = 0; x < 100000000; x++) {
@@ -64,7 +64,7 @@ int main (int argc, char*argv[]) {
 		wait(NN, L, I);
 	}
 	printf("The before Value:%d\n", *I);
-	add10M(L,I,lock);
+	add10M(L,I);
 	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
