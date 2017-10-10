@@ -22,9 +22,10 @@ typedef struct {
 } lockableInt;
 //adds 10 million onto the integer in increments of 1.
 void add10M(lockableInt *L, lockableInt *I) {
+	while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
+	} 
+	booger = sem_open("BOOGER1", 0);
 	for (int x = 0; x < 100000000; x++) {
-		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
-		} 
 		if (sem_wait(booger) != 0)  {
 			perror("Sem Wait Failed.\n");
 		}
@@ -55,7 +56,6 @@ int main (int argc, char*argv[]) {
 		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
 		L->val = 1; //initialise the waiter to stall
 	} else {
-		booger = sem_open("BOOGER1", 0);
 		L->val = 0; //initialise the waiter to stall
 		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
 	}
