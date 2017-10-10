@@ -37,12 +37,18 @@ void initialize(Nahanni *NN, int *L, int *I) {
 	
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 	*L = 1; //initialise the waiter to stall
+	add10M(L,I);
+	lock = sem_open("/SEMA1\0", O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+	printf("The after Value:%d\n", *I);
 
 }
 
 void wait(Nahanni *NN, int *L, int *I) {
 	*L = 0; //initialise the waiter to stall
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
+	lock = sem_open("/SEMA1\0",0);
+	add10M(L,I);
+	printf("The after Value:%d\n", *I);
 }
 
 int main (int argc, char*argv[]) {
@@ -56,18 +62,11 @@ int main (int argc, char*argv[]) {
 
 	int *I = &ints[0]; 
 	int *L = &ints[1];
-	if (sem_init(lock, 1, 1) != 0) {
-		errPrint("Problem Initializing Semaphore. Aborting.\n");
-		exit(EXIT_FAILURE);
-	}
 	if (atoi(argv[3]) == 1) {
 		initialize(NN, L, I);
 	} else {
 		wait(NN, L, I);
 	}
-	printf("The before Value:%d\n", *I);
-	add10M(L,I);
-	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
 
