@@ -49,20 +49,17 @@ int main (int argc, char*argv[]) {
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
 	
-	booger = sem_open("BOOGER", O_CREAT, S_IWOTH|S_IROTH, 0);
-
-	if (sem_init(&(I->lock), 1, 1) != 0) {
-		errPrint("Problem Initializing Semaphore. Aborting.\n");
-		exit(EXIT_FAILURE);
-	}
 
 	if (atoi(argv[3]) == 1) {
+		booger = sem_open("BOOGER1", O_CREAT | O_EXCL, 0777, 1);
 		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
 		L->val = 1; //initialise the waiter to stall
 	} else {
+		booger = sem_open("BOOGER1", O_CREAT | O_EXCL, 0777, 0);
 		L->val = 0; //initialise the waiter to stall
 		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
 	}
+	sem_unlink("BOOGER1");
 	
 	printf("The before Value:%d\n", I->val);
 	
@@ -71,6 +68,7 @@ int main (int argc, char*argv[]) {
 	printf("The after Value:%d\n", I->val);
 	
 	freeNahanni(NN);
+	sem_close(booger);
 }
 
 
