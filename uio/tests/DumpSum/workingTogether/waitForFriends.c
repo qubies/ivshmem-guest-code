@@ -49,7 +49,7 @@ int main (int argc, char*argv[]) {
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
 	
-	booger = sem_open("BOOGER", O_CREAT);
+	booger = sem_open("BOOGER", O_CREAT, S_IWOTH, 1);
 
 	if (sem_init(&(I->lock), 1, 1) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
