@@ -56,8 +56,8 @@ int main (int argc, char*argv[]) {
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
 	int *I = (int *) &NN->Memory[0]; 
-	int *L = (int *) &NN->Memory[2]; 
-	lock = (sem_t *) &NN->Memory[4];
+	int *L = (int *) &NN->Memory[64]; 
+	lock = (sem_t *) &NN->Memory[128];
 	if (atoi(argv[3]) == 1) {
 		initialize(NN, L, I);
 	} else {
