@@ -14,6 +14,8 @@
 #include "Nahanni.h"
 #include "generalFunctions.h"
 
+sem_t *booger;
+
 typedef struct {
 	int val;
 	sem_t lock;
@@ -23,14 +25,14 @@ void add10M(lockableInt *L, lockableInt *I) {
 	for (int x = 0; x < 100000000; x++) {
 		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		} 
-		if (sem_wait(&(I->lock)) != 0)  {
+		if (sem_wait(booger) != 0)  {
 			perror("Sem Wait Failed.\n");
 		}
 		(I->val)++;
 		if ((I->val) % 10000000 == 0) {
 			printf("My Number is:%d\n", I->val);
 		}
-		if (sem_post(&(I->lock)) != 0) {
+		if (sem_post(booger) != 0) {
 			perror("Sem Post Failed.\n");
 		}
 	}
@@ -46,6 +48,9 @@ int main (int argc, char*argv[]) {
 	lockableInt *lockables = (lockableInt *)(NN->Memory);
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
+	
+	booger = sem_open("BOOGER", O_CREAT);
+
 	if (sem_init(&(I->lock), 1, 1) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
