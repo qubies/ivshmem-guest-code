@@ -35,10 +35,6 @@ void add10M(int *L, int *I) {
 
 void initialize(Nahanni *NN, int *L, int *I) {
 	
-	if (sem_init(lock, 1, 1) != 0) {
-		errPrint("Problem Initializing Semaphore. Aborting.\n");
-		exit(EXIT_FAILURE);
-	}
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 	*L = 1; //initialise the waiter to stall
 
@@ -56,10 +52,14 @@ int main (int argc, char*argv[]) {
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
 	lock = (sem_t *) &NN->Memory;
-	int *ints = (int *) &(NN->Memory[4096]);
+	int *ints = (int *) &(((sem_t *)NN->Memory)[1]);//move to the end of the semaphore, and make some ints!
 
 	int *I = &ints[0]; 
 	int *L = &ints[1];
+	if (sem_init(lock, 1, 1) != 0) {
+		errPrint("Problem Initializing Semaphore. Aborting.\n");
+		exit(EXIT_FAILURE);
+	}
 	if (atoi(argv[3]) == 1) {
 		initialize(NN, L, I);
 	} else {
