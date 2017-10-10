@@ -36,8 +36,13 @@ void add10M(lockableInt *L, lockableInt *I) {
 	}
 }
 
-void initialize(Nahanni *NN) {
-	
+int main (int argc, char*argv[]) {
+	if (argc != 4) {
+		errPrint("Usage file, size, bool start\n");
+		exit(EXIT_FAILURE);
+	}
+	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
+
 	lockableInt *lockables = (lockableInt *)(NN->Memory);
 	lockableInt *I = &lockables[0]; 
 	lockableInt *L = &lockables[1]; 
@@ -45,38 +50,22 @@ void initialize(Nahanni *NN) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
-	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
-	L->val = 1; //initialise the waiter to stall
-	printf("The before Value:%d\n", I->val);
-	add10M(L,I);
-	printf("The after Value:%d\n", I->val);
-	freeNahanni(NN);
 
-}
-
-void wait(Nahanni *NN) {
-	lockableInt *lockables = (lockableInt *)(NN->Memory);
-	lockableInt *I = &lockables[0]; 
-	lockableInt *L = &lockables[1]; 
-	L->val = 0; //initialise the waiter to stall
-	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
-	printf("The before Value:%d\n", I->val);
-	add10M(L,I);
-	printf("The after Value:%d\n", I->val);
-	freeNahanni(NN);
-}
-
-int main (int argc, char*argv[]) {
-	if (argc != 4) {
-		errPrint("Usage file, size, bool start\n");
-		exit(EXIT_FAILURE);
-	}
-	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
 	if (atoi(argv[3]) == 1) {
-		initialize(NN);
+		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
+		L->val = 1; //initialise the waiter to stall
 	} else {
-		wait(NN);
+		L->val = 0; //initialise the waiter to stall
+		I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
 	}
+	
+	printf("The before Value:%d\n", I->val);
+	
+	add10M(L,I);
+	
+	printf("The after Value:%d\n", I->val);
+	
+	freeNahanni(NN);
 }
 
 
