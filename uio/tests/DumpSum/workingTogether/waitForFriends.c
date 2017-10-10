@@ -55,12 +55,11 @@ int main (int argc, char*argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
-	int *I = (int *) &NN->Memory; 
-	NN->Memory += sizeof(int);
-	int *L = (int *) &NN->Memory; 
-	NN->Memory += sizeof(int);
 	lock = (sem_t *) &NN->Memory;
-	NN->Memory += sizeof(sem_t);
+	int *ints = (int *) &(NN->Memory[4096]);
+
+	int *I = &ints[0]; 
+	int *L = &ints[1];
 	if (atoi(argv[3]) == 1) {
 		initialize(NN, L, I);
 	} else {
