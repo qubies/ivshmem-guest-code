@@ -38,7 +38,7 @@ void initialize(Nahanni *NN, int *L, int *I) {
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 	*L = 1; //initialise the waiter to stall
 	add10M(L,I);
-	lock = sem_open("/SEMA1\0", O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+	lock = sem_open("/SEMA1\0", O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
 	printf("The after Value:%d\n", *I);
 
 }
