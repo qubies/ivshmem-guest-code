@@ -14,56 +14,39 @@
 #include "Nahanni.h"
 #include "generalFunctions.h"
 
-typedef struct {
-	int val;
-	sem_t lock;
-} lockableInt;
+sem_t *lock;
 //adds 10 million onto the integer in increments of 1.
-void add10M(lockableInt *L, lockableInt *I) {
+void add10M(int *L, int *I, sem_t *lock) {
+	while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
+	} 
 	for (int x = 0; x < 100000000; x++) {
-		while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
-		} 
-		if (sem_wait(&(I->lock)) != 0)  {
+		if (sem_wait(lock) != 0)  {
 			perror("Sem Wait Failed.\n");
 		}
-		(I->val)++;
-		if ((I->val) % 10000000 == 0) {
-			printf("My Number is:%d\n", I->val);
+		(*I)++;
+		if ((*I) % 10000000 == 0) {
+			printf("My Number is:%d\n", *I);
 		}
-		if (sem_post(&(I->lock)) != 0) {
+		if (sem_post(lock) != 0) {
 			perror("Sem Post Failed.\n");
 		}
 	}
 }
 
-void initialize(Nahanni *NN) {
+void initialize(Nahanni *NN, int *L, int *I) {
 	
-	lockableInt *lockables = (lockableInt *)(NN->Memory);
-	lockableInt *I = &lockables[0]; 
-	lockableInt *L = &lockables[1]; 
-	if (sem_init(&(I->lock), 1, 1) != 0) {
+	if (sem_init(lock, 1, 1) != 0) {
 		errPrint("Problem Initializing Semaphore. Aborting.\n");
 		exit(EXIT_FAILURE);
 	}
-	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
-	L->val = 1; //initialise the waiter to stall
-	printf("The before Value:%d\n", I->val);
-	add10M(L,I);
-	printf("The after Value:%d\n", I->val);
-	freeNahanni(NN);
+	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
+	*L = 1; //initialise the waiter to stall
 
 }
 
-void wait(Nahanni *NN) {
-	lockableInt *lockables = (lockableInt *)(NN->Memory);
-	lockableInt *I = &lockables[0]; 
-	lockableInt *L = &lockables[1]; 
-	L->val = 0; //initialise the waiter to stall
-	I->val = 0; //initialize the counter too ... because its prettier. Its not really needed
-	printf("The before Value:%d\n", I->val);
-	add10M(L,I);
-	printf("The after Value:%d\n", I->val);
-	freeNahanni(NN);
+void wait(Nahanni *NN, int *L, int *I) {
+	*L = 0; //initialise the waiter to stall
+	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
 }
 
 int main (int argc, char*argv[]) {
@@ -72,10 +55,17 @@ int main (int argc, char*argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
+	int *I = (int *) &NN->Memory[0]; 
+	int *L = (int *) &NN->Memory[2]; 
+	lock = (sem_t *) &NN->Memory[4];
 	if (atoi(argv[3]) == 1) {
-		initialize(NN);
+		initialize(NN, L, I);
 	} else {
-		wait(NN);
+		wait(NN, L, I);
 	}
+	printf("The before Value:%d\n", *I);
+	add10M(L,I,lock);
+	printf("The after Value:%d\n", *I);
+	freeNahanni(NN);
 }
 
