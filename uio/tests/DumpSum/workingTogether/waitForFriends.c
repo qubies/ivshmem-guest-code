@@ -24,7 +24,7 @@ typedef struct {
 void add10M(lockableInt *L, lockableInt *I) {
 	while (L->val != 1) { //cheezy sleep while it waits for the start flag to be set. 
 	} 
-	booger = sem_open("BOOGER1", 0);
+	booger = sem_open("BOOGER1", O_EXCL);
 	for (int x = 0; x < 100000000; x++) {
 		if (sem_wait(booger) != 0)  {
 			perror("Sem Wait Failed.\n");
