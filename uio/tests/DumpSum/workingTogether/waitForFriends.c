@@ -19,11 +19,12 @@ void add10M(int *Begin, int *Run, int *I) {
 	while (*Begin != 1) { //cheezy sleep while it waits for the start flag to be set. 
 		nanoSleep(10000);
 	} 
-	for (int x = 0; x < COUNT; x++) {
+	for (int x = 0; x < COUNT;) {
 		while (*Run != 1) {} //spinLock
 		*Run = 0;
 		for (;;) {
 			(*I)++;
+			x++;
 			if ((*I) % COUNT/10 == 0) {
 				printf("My Number is:%d\n", *I);
 				*Run = 1;
@@ -54,6 +55,7 @@ int main (int argc, char*argv[]) {
 	int *Begin = &ints[1];
 	int *Run = &ints[2];
 	*Run = 1;
+	*I = 0;
 	if (atoi(argv[3]) == 1) {
 		initialize(Begin);
 	} else {
