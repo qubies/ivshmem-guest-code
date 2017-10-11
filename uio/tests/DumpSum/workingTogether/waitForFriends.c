@@ -25,7 +25,6 @@ void add10M(Nahanni *NN, int *I, int *runnerID) {
 			}
 			(*runnerID)++;
 			*runnerID %= NN->numMachines;
-			debugPrint("The Runner ID IS: %d\n", *runnerID);
 	}
 }
 
