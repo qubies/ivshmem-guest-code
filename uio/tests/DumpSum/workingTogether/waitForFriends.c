@@ -53,6 +53,7 @@ int main (int argc, char*argv[]) {
 	int *I = &ints[0]; 
 	int *Begin = &ints[1];
 	int *Run = &ints[2];
+	*Run = 1;
 	if (atoi(argv[3]) == 1) {
 		initialize(Begin);
 	} else {
