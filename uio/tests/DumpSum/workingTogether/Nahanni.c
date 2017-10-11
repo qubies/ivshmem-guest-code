@@ -7,9 +7,12 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <unistd.h>
-Nahanni *NewNahanni(char *filePath, int length) {
+Nahanni *NewNahanni(char *filePath, int length, int id, int numMachines) {
 	//create the main structure
 	Nahanni *NN = allocationCheck(malloc(sizeof(Nahanni)));
+	NN->ID = id;
+	NN->numMachines = numMachines;
+
 	//build the filePath
 	NN->filePath = allocationCheck(calloc(strlen(filePath)+1, sizeof(char))); 
 	NN->filePath = strndup(filePath, strlen(filePath));
