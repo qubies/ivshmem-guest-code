@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "generalFunctions.h"
 void debugPrint(const char *str, ...) {
@@ -41,4 +42,6 @@ void strFree(char *SP) {
         }
 }
 
-
+void nanoSleep(long nanoSeconds) {
+	nanosleep((const struct timespec[]){{0, nanoSeconds}}, NULL);
+}

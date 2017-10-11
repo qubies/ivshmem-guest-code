@@ -11,4 +11,5 @@ void *allocationCheck(void *val);
 
 void strFree(char *SP);
 
+void nanoSleep(long);
 #endif

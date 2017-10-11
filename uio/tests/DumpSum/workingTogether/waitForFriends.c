@@ -9,44 +9,37 @@
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
-#include <semaphore.h>
 
 #include "Nahanni.h"
 #include "generalFunctions.h"
 
-sem_t *lock;
+const static int COUNT = 1000000;
 //adds 10 million onto the integer in increments of 1.
-void add10M(int *L, int *I) {
-	while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
+void add10M(int *Begin, int *Run, int *I) {
+	while (*Begin != 1) { //cheezy sleep while it waits for the start flag to be set. 
+		nanoSleep(10000);
 	} 
-	for (int x = 0; x < 100000000; x++) {
-		if (sem_wait(lock) != 0)  {
-			perror("Sem Wait Failed.\n");
-		}
-		(*I)++;
-		if ((*I) % 10000000 == 0) {
-			printf("My Number is:%d\n", *I);
-		}
-		if (sem_post(lock) != 0) {
-			perror("Sem Post Failed.\n");
+	for (int x = 0; x < COUNT; x++) {
+		while (*Run != 1) {} //spinLock
+		*Run = 0;
+		for (;;) {
+			(*I)++;
+			if ((*I) % COUNT/10 == 0) {
+				printf("My Number is:%d\n", *I);
+				*Run = 1;
+				nanoSleep(100000);
+				break;
+			}
 		}
 	}
 }
 
-void initialize(Nahanni *NN, int *L, int *I) {
-	
-	if (sem_init(lock, 1, 1) != 0) {
-		errPrint("Problem Initializing Semaphore. Aborting.\n");
-		exit(EXIT_FAILURE);
-	}
-	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
-	*L = 1; //initialise the waiter to stall
-
+void initialize(int *Begin) {
+	*Begin = 1; //start the machines running
 }
 
-void wait(Nahanni *NN, int *L, int *I) {
-	*L = 0; //initialise the waiter to stall
-	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
+void wait(int *Begin) {
+	*Begin = 0; //initialise the waiter to stall
 }
 
 int main (int argc, char*argv[]) {
@@ -55,18 +48,18 @@ int main (int argc, char*argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
-	lock = (sem_t *) &NN->Memory;
-	int *ints = (int *) &(((sem_t *)NN->Memory)[1]);
+	int *ints = (int *) NN->Memory;
 
 	int *I = &ints[0]; 
-	int *L = &ints[1];
+	int *Begin = &ints[1];
+	int *Run = &ints[2];
 	if (atoi(argv[3]) == 1) {
-		initialize(NN, L, I);
+		initialize(Begin);
 	} else {
-		wait(NN, L, I);
+		wait(Begin);
 	}
 	printf("The before Value:%d\n", *I);
-	add10M(L,I);
+	add10M(Begin,Run,I);
 	printf("The after Value:%d\n", *I);
 	freeNahanni(NN);
 }
