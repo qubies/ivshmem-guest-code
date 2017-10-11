@@ -23,8 +23,11 @@ void add10M(Nahanni *NN, int *I, int *runnerID) {
 			if ((*I) % (COUNT/10) == 0) {
 				printf("My Number is:%d\n", *I);
 			}
-			(*runnerID)++;
-			*runnerID %= NN->numMachines;
+			if (*runnerID+1  == NN->numMachines) {
+				*runnerID = 0;
+			} else {
+				(*runnerID)++;
+			}
 	}
 }
 
