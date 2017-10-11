@@ -7,8 +7,8 @@
 #***********************************************************************/
 
 CC = gcc
-CFLAGS= -g -c -std=c99 -D_POSIX_C_SOURCE=200809L -D_BSD_SOURCE 
-LDFLAGS= -g
+CFLAGS= -g -c -std=c11 -D_POSIX_C_SOURCE=200809L -D_BSD_SOURCE 
+LDFLAGS= -std=c11 -g
 LDLIBS=-pthread
 .PHONY: all clean test
 
