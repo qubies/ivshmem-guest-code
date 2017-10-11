@@ -28,7 +28,7 @@ void add10M(int *Begin, int *Run, int *I) {
 			if ((*I) % (COUNT/10) == 0) {
 				printf("My Number is:%d\n", *I);
 				*Run = 1;
-				nanoSleep(100000);
+				//nanoSleep(100000);
 				break;
 			}
 		}
