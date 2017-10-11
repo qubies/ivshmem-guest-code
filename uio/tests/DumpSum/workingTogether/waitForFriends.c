@@ -13,7 +13,7 @@
 #include "Nahanni.h"
 #include "generalFunctions.h"
 
-const static int COUNT = 1000000;
+const static int COUNT = 100000000;
 //adds 10 million onto the integer in increments of 1.
 void add10M(int *Begin, int *Run, int *I) {
 	while (*Begin != 1) { //cheezy sleep while it waits for the start flag to be set. 
