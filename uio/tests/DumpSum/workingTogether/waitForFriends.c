@@ -17,7 +17,7 @@ const static int COUNT = 100000000;
 //adds 10 million onto the integer in increments of 1.
 void add10M(Nahanni *NN, int *I, int *runnerID) {
 	for (int x = 0; x < COUNT;) {
-		if (*runnerID == NN->ID) {} //spinLock
+		while (*runnerID != NN->ID) {}
 			(*I)++;
 			x++;
 			if ((*I) % (COUNT/10) == 0) {
