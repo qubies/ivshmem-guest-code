@@ -19,6 +19,7 @@ pthread_spinlock_t *lock;
 void add10M(int *L, int *I) {
 	while (*L != 1) { //cheezy sleep while it waits for the start flag to be set. 
 	} 
+	printf("starting...\n");
 	for (int x = 0; x < 100000000; x++) {
 		if (pthread_spin_lock(lock) != 0)  {
 			perror("Sem Wait Failed.\n");
@@ -40,7 +41,7 @@ void initialize(Nahanni *NN, int *L, int *I) {
 		exit(EXIT_FAILURE);
 	}
 	*I = 0; //initialize the counter too ... because its prettier. Its not really needed
-	*L = 1; //initialise the waiter to stall
+	*L = 1; //initialise the waiter to start
 
 }
 
