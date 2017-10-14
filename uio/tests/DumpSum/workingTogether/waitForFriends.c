@@ -53,7 +53,7 @@ int main (int argc, char*argv[]) {
 	}
 	Nahanni *NN = NewNahanni(argv[1], atoi(argv[2])); //make the Nahanni.
 	lock = (pthread_spinlock_t *) &NN->Memory;
-	int *ints = (int *) &(((pthread_spinlock_t *)(NN->Memory))[10]);
+	int *ints = (int *) &(NN->Memory[50]);
 
 	int *I = &ints[0]; 
 	int *L = &ints[1];
