@@ -55,7 +55,7 @@ int main (int argc, char*argv[]) {
 
 	int *ints = (int *) &NN->Memory;
 	
-	lock = *((pthread_spinlock_t *) &(((int *)NN->Memory)[2]));
+	lock = *((pthread_spinlock_t *) &(((int *)NN->Memory)[10]));
 
 	int *I = &ints[0]; 
 	int *L = &ints[1];
