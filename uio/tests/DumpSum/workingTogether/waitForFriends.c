@@ -21,16 +21,12 @@ void add10M(int *L, int *I) {
 	} 
 	printf("starting...\n");
 	for (int x = 0; x < 100000000; x++) {
-		if (pthread_spin_lock(lock) != 0)  {
-			perror("Sem Wait Failed.\n");
-		}
+		pthread_spin_lock(lock);
 		(*I)++;
 		if ((*I) % 10000000 == 0) {
 			printf("My Number is:%d\n", *I);
 		}
-		if (pthread_spin_unlock(lock) != 0) {
-			perror("Sem Post Failed.\n");
-		}
+		pthread_spin_unlock(lock); 
 	}
 }
 
